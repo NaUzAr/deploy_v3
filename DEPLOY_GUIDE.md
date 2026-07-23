@@ -317,7 +317,7 @@ nano Dockerfile
 FROM php:8.3-fpm-alpine
 
 RUN apk add --no-cache nginx supervisor libpng-dev libzip-dev postgresql-dev nodejs npm \
-    && docker-php-ext-install pdo pdo_pgsql zip gd bcmath
+    && docker-php-ext-install pdo pdo_pgsql zip gd bcmath pcntl
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY nginx.conf /etc/nginx/http.d/default.conf
