@@ -6,9 +6,20 @@ SOP ini dibuat khusus untuk memandu _developer_ atau tim melakukan reset (wipe o
 
 ---
 
-## FASE 1: PEMBERSIHAN VPS (WIPE OUT)
-Langkah ini akan menghapus total konfigurasi Docker lama yang berantakan agar VPS kembali bersih.
+## FASE 1: PERSIAPAN SERVER (Pilih salah satu)
 
+**Opsi A: Jika Menggunakan Server Baru (Fresh Install OS)**
+Jika Anda baru saja me-rebuild OS atau membeli VPS baru, Anda wajib meng-_install_ Docker terlebih dahulu:
+1. Masuk ke VPS via SSH (`ssh root@IP_VPS`).
+2. _Update_ sistem dan _install_ Docker:
+   ```bash
+   apt update && apt upgrade -y
+   curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+   apt install docker-compose-plugin -y
+   ```
+
+**Opsi B: Jika Memakai Server Lama (Wipe Out)**
+Langkah ini akan menghapus total konfigurasi Docker lama yang berantakan agar VPS kembali bersih.
 1. Masuk ke VPS via SSH (`ssh root@IP_VPS`).
 2. Pastikan sudah ada **Snapshot** atau **Backup** di panel VPS sebelum memulai eksekusi.
 3. Matikan dan hapus semua _container_ Docker lama:
