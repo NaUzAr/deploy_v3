@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: shared_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: webadmin
+      POSTGRES_PASSWORD: secretpassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - webapps
+
+volumes:
+  postgres_data:
+
+networks:
+  webapps:
+    external: true

@@ -1,0 +1,23 @@
+services:
+  app:
+    build: .
+    container_name: NAMA_PROJECT_app
+    restart: always
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: https://DOMAIN.com
+      DB_CONNECTION: pgsql
+      DB_HOST: shared_postgres
+      DB_PORT: 5432
+      DB_DATABASE: db_NAMA_PROJECT
+      DB_USERNAME: webadmin
+      DB_PASSWORD: YOUR_PASSWORD
+    volumes:
+      - ./src/storage:/var/www/html/storage
+    networks:
+      - webapps
+
+networks:
+  webapps:
+    external: true

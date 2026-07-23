@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    container_name: NAMA_PROJECT_app
+    restart: always
+    networks:
+      - webapps
+
+networks:
+  webapps:
+    external: true
