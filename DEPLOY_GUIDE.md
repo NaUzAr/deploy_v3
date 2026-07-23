@@ -314,7 +314,7 @@ nano Dockerfile
 
 **Paste seluruh isi ini:**
 ```dockerfile
-FROM php:8.2-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 RUN apk add --no-cache nginx supervisor libpng-dev libzip-dev postgresql-dev nodejs npm \
     && docker-php-ext-install pdo pdo_pgsql zip gd bcmath
@@ -562,7 +562,7 @@ MQTT_PASSWORD=GANTI_PASSWORD_MQTT
 REVERB_APP_ID=12345
 REVERB_APP_KEY=swatani_key
 REVERB_APP_SECRET=swatani_secret
-REVERB_HOST="0.0.0.0"
+REVERB_HOST="127.0.0.1"
 REVERB_PORT=8080
 REVERB_SCHEME=http
 
@@ -692,13 +692,81 @@ docker ps
 docker logs swaratani_app --tail 50
 ```
 
-### Rebuild Setelah Update Code
+### Rebuild Setelah Update Code (Manual)
 ```bash
 cd /opt/docker-apps/swaratani/src
 git pull
 
 cd /opt/docker-apps/swaratani
 docker compose up -d --build
+```
+
+### 🚀 Rebuild Setelah Update Code (Otomatis via Script)
+
+Project ini sudah menyertakan file `deploy.sh` di dalam source code (`src/deploy.sh`).
+Script ini akan otomatis: **pull code → rebuild docker → migrate → cache config → restart**.
+
+**Setup pertama kali (sekali saja):**
+```bash
+# Copy script dari src ke folder project dan beri izin eksekusi
+cp /opt/docker-apps/swaratani/src/deploy.sh /opt/docker-apps/swaratani/deploy.sh
+chmod +x /opt/docker-apps/swaratani/deploy.sh
+```
+
+**Setiap kali ingin deploy update:**
+```bash
+cd /opt/docker-apps/swaratani
+bash deploy.sh
+```
+
+> ℹ️ Script ini melakukan langkah-langkah berikut secara otomatis:
+> 1. `git pull origin main` — Tarik code terbaru dari GitHub
+> 2. `docker compose up -d --build` — Rebuild image & restart container
+> 3. `php artisan migrate --force` — Jalankan migrasi database
+> 4. `php artisan config:cache` — Cache konfigurasi
+> 5. `php artisan route:cache` — Cache routing
+> 6. `php artisan view:cache` — Cache view/template
+> 7. `docker restart swaratani_app` — Restart container
+
+**Isi file `deploy.sh`:**
+```bash
+#!/bin/bash
+# ============================================
+# Swaratani Deploy Script
+# Jalankan di server: bash deploy.sh
+# ============================================
+
+set -e
+
+PROJECT_DIR="/opt/docker-apps/swaratani"
+CONTAINER="swaratani_app"
+
+echo "🔄 Pulling latest code from GitHub..."
+cd "$PROJECT_DIR/src"
+git pull origin main
+
+echo "🔨 Building & restarting Docker..."
+cd "$PROJECT_DIR"
+docker compose up -d --build
+
+echo "⏳ Waiting for container to start..."
+sleep 5
+
+echo "🗄️ Running migrations..."
+docker exec $CONTAINER php artisan migrate --force
+
+echo "⚡ Caching config..."
+docker exec $CONTAINER php artisan config:cache
+docker exec $CONTAINER php artisan route:cache
+docker exec $CONTAINER php artisan view:cache
+
+echo "🔄 Restarting container..."
+docker restart $CONTAINER
+
+echo ""
+echo "✅ Deploy selesai! Cek: https://swaratani.id"
+echo ""
+docker ps | grep $CONTAINER
 ```
 
 ### Jalankan Artisan Command
