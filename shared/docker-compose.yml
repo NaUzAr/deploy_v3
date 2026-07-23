@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: shared_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: webadmin
+      POSTGRES_PASSWORD: secretpassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - webapps
+
+  mqtt:
+    image: eclipse-mosquitto:2
+    container_name: mqtt_broker
+    restart: always
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./passwd:/mosquitto/config/passwd
+      - ./mqtt-data:/mosquitto/data
+      - ./mqtt-log:/mosquitto/log
+    networks:
+      - webapps
+
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: nginx_proxy
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - webapps
+
+volumes:
+  postgres_data:
+
+networks:
+  webapps:
+    external: true

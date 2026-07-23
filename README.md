@@ -12,19 +12,13 @@ Bagian ini hanya perlu dijalankan sekali untuk menyalakan database, MQTT, dan Ng
    ```powershell
    docker network create webapps
    ```
-3. Jalankan **PostgreSQL Shared**:
+3. Buat password untuk MQTT Broker (jalankan ini untuk membuat user "admin" dengan password "rahasia"):
    ```powershell
-   cd D:\Dev\SWATANI\setup_tutorial\shared\postgres
-   docker compose up -d
+   docker run --rm -v "D:\Dev\SWATANI\setup_tutorial\shared\passwd:/passwd" eclipse-mosquitto:2 mosquitto_passwd -b /passwd admin rahasia
    ```
-4. Jalankan **MQTT Broker**:
+4. Jalankan **Semua Infrastruktur Shared (Postgres, MQTT, Nginx)**:
    ```powershell
-   cd D:\Dev\SWATANI\setup_tutorial\shared\mqtt
-   docker compose up -d
-   ```
-5. Jalankan **Nginx Proxy**:
-   ```powershell
-   cd D:\Dev\SWATANI\setup_tutorial\shared\nginx-proxy
+   cd D:\Dev\SWATANI\setup_tutorial\shared
    docker compose up -d
    ```
 
@@ -55,6 +49,9 @@ docker exec -it shared_postgres psql -U webadmin -c "CREATE DATABASE db_web_baru
 - Ganti `container_name: NAMA_PROJECT_app` menjadi `container_name: web_baru_app`.
 - Ganti `DB_DATABASE: db_NAMA_PROJECT` menjadi `DB_DATABASE: db_web_baru`.
 - Masukkan password Anda di `DB_PASSWORD: secretpassword`.
+- Jika Anda memiliki lebih dari 1 project yang menggunakan Reverb, ubah *host port* di bagian `ports: - "8080:8080"` menjadi port unik (misal `8081:8080`).
+
+> 💡 **Info Template Laravel Terbaru**: Template ini sudah otomatis menyertakan fitur instalasi NodeJS, `npm run build` untuk Vite (saat `docker compose build`), dan Worker Supervisor untuk Laravel Queue (`queue:work`), MQTT Listener (`mqtt:listen`), serta Laravel Reverb (`reverb:start`).
 
 ### Langkah 4: Masukkan Source Code (Clone)
 Buka terminal di dalam folder `src` dan clone repository Anda:
@@ -96,7 +93,7 @@ docker exec web_baru_app php artisan storage:link
 
 ### Langkah 8: Daftarkan Domain Lokal ke Nginx Proxy
 Agar Anda bisa mengaksesnya di browser dengan nama cantik (misal `swatani.local`), edit konfigurasi Nginx Proxy:
-1. Buka file `D:\Dev\SWATANI\setup_tutorial\shared\nginx-proxy\nginx.conf`.
+1. Buka file `D:\Dev\SWATANI\setup_tutorial\shared\nginx.conf`.
 2. Tambahkan atau edit block `server {}` seperti ini:
    ```nginx
    server {
@@ -114,8 +111,8 @@ Agar Anda bisa mengaksesnya di browser dengan nama cantik (misal `swatani.local`
    ```
 3. Restart Nginx Proxy:
    ```powershell
-   cd D:\Dev\SWATANI\setup_tutorial\shared\nginx-proxy
-   docker compose restart
+   cd D:\Dev\SWATANI\setup_tutorial\shared
+   docker compose restart nginx-proxy
    ```
 4. Tambahkan `127.0.0.1 webbaru.local` ke file `C:\Windows\System32\drivers\etc\hosts` Anda.
 
