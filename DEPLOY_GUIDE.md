@@ -492,40 +492,103 @@ cp .env.example .env
 nano .env
 ```
 
-> ⚠️ Yang WAJIB dicek dan diganti di file `.env`:
+**Hapus semua isi `.env`, lalu paste seluruh isi ini:**
+
+```env
+APP_NAME=Swaratani
+APP_ENV=production
+APP_KEY=
+APP_DEBUG=false
+APP_URL=https://swaratani.id
+
+APP_LOCALE=en
+APP_FALLBACK_LOCALE=en
+APP_FAKER_LOCALE=en_US
+
+APP_MAINTENANCE_DRIVER=file
+
+BCRYPT_ROUNDS=12
+
+LOG_CHANNEL=stack
+LOG_STACK=single
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=error
+
+DB_CONNECTION=pgsql
+DB_HOST=GANTI_HOST_DATABASE
+DB_PORT=5432
+DB_DATABASE=GANTI_NAMA_DATABASE
+DB_USERNAME=GANTI_USERNAME_DATABASE
+DB_PASSWORD=GANTI_PASSWORD_DATABASE
+
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=false
+SESSION_PATH=/
+SESSION_DOMAIN=null
+
+BROADCAST_CONNECTION=reverb
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=database
+
+CACHE_STORE=database
+
+REDIS_CLIENT=phpredis
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+MAIL_MAILER=resend
+MAIL_FROM_ADDRESS="noreply@swaratani.id"
+MAIL_FROM_NAME="Swaratani IoT"
+
+RESEND_API_KEY=GANTI_RESEND_API_KEY
+
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=
+AWS_USE_PATH_STYLE_ENDPOINT=false
+
+VITE_APP_NAME="${APP_NAME}"
+
+# MQTT Configuration
+MQTT_HOST=GANTI_HOST_MQTT
+MQTT_PORT=1883
+MQTT_USERNAME=GANTI_USERNAME_MQTT
+MQTT_PASSWORD=GANTI_PASSWORD_MQTT
+
+# Reverb (WebSocket) Configuration
+REVERB_APP_ID=12345
+REVERB_APP_KEY=swatani_key
+REVERB_APP_SECRET=swatani_secret
+REVERB_HOST="0.0.0.0"
+REVERB_PORT=8080
+REVERB_SCHEME=http
+
+VITE_REVERB_APP_KEY="${REVERB_APP_KEY}"
+VITE_REVERB_HOST="swaratani.id"
+VITE_REVERB_PORT=8080
+VITE_REVERB_SCHEME="https"
+```
+
+> ⚠️ GANTI bagian berikut:
 >
-> **Database:**
-> ```env
-> DB_CONNECTION=pgsql
-> DB_HOST=GANTI_HOST_DATABASE
-> DB_PORT=5432
-> DB_DATABASE=GANTI_NAMA_DATABASE
-> DB_USERNAME=GANTI_USERNAME_DATABASE
-> DB_PASSWORD=GANTI_PASSWORD_DATABASE
-> ```
+> | Placeholder                | Keterangan                                    | Contoh                     |
+> |----------------------------|-----------------------------------------------|----------------------------|
+> | `GANTI_HOST_DATABASE`      | IP server database Anda                       | `203.194.115.76` atau `shared_postgres` |
+> | `GANTI_NAMA_DATABASE`      | Nama database yang sudah dibuat               | `db_web1`                  |
+> | `GANTI_USERNAME_DATABASE`  | Username database                             | `webadmin`                 |
+> | `GANTI_PASSWORD_DATABASE`  | Password database                             | `Rizal1234`                |
+> | `GANTI_HOST_MQTT`          | IP/nama container MQTT Broker                 | `mqtt_broker` atau `76.13.21.230` |
+> | `GANTI_USERNAME_MQTT`      | Username MQTT yang sudah dibuat               | `iot`                      |
+> | `GANTI_PASSWORD_MQTT`      | Password MQTT yang sudah dibuat               | `smartgh`                  |
+> | `GANTI_RESEND_API_KEY`     | API key dari akun Resend.com Anda             | `re_RDP5z6b4_xxxx`        |
 >
-> **MQTT:**
-> ```env
-> MQTT_HOST=mqtt_broker
-> MQTT_PORT=1883
-> MQTT_USERNAME=admin
-> MQTT_PASSWORD=GANTI_PASSWORD_MQTT
-> ```
->
-> **Reverb (WebSocket):**
-> ```env
-> REVERB_APP_ID=GANTI_REVERB_APP_ID
-> REVERB_APP_KEY=GANTI_REVERB_APP_KEY
-> REVERB_APP_SECRET=GANTI_REVERB_APP_SECRET
-> REVERB_HOST=0.0.0.0
-> REVERB_PORT=8080
-> REVERB_SCHEME=http
->
-> VITE_REVERB_APP_KEY="${REVERB_APP_KEY}"
-> VITE_REVERB_HOST="swaratani.id"
-> VITE_REVERB_PORT=8080
-> VITE_REVERB_SCHEME="https"
-> ```
+> ℹ️ Jika database ada di **server VPS ini** (Postgres Docker), gunakan `DB_HOST=shared_postgres`.
+> ℹ️ Jika database ada di **server lain**, gunakan IP server database tersebut.
+> ℹ️ Jika MQTT broker ada di **server VPS ini**, gunakan `MQTT_HOST=mqtt_broker`.
+> ℹ️ Jika MQTT broker ada di **server lain**, gunakan IP server MQTT tersebut.
 >
 > Simpan file: tekan `Ctrl+X`, lalu `Y`, lalu `Enter`.
 
