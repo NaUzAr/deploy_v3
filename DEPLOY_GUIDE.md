@@ -881,3 +881,14 @@ git clone https://github.com/USERNAME/REPO.git .
 - [ ] Port firewall sudah dibuka (22, 80, 443, 1883, 8080)
 - [ ] DNS Cloudflare sudah mengarah ke IP VPS
 - [ ] Website bisa diakses di browser
+
+---
+
+# 🆕 PEMBARUAN TERBARU (Juli 2026)
+
+Aplikasi Swaratani telah mendapatkan beberapa update terbaru yang juga sudah tercakup dalam konfigurasi deploy ini:
+1. **Pembaruan Real-time via Laravel Reverb**: Sistem monitoring kini menggunakan WebSocket (port 8080) untuk pembaharuan data secara instan tanpa perlu reload atau polling (menghemat resource server).
+2. **Optimistic UI & Pengaman Tombol**: Fitur kontrol relay kini memiliki *debounce* dan jeda 20 detik setelah diklik untuk mencegah spam dan tabrakan data (race condition).
+3. **Penyeragaman Navbar**: Tampilan antarmuka atas (Navbar) telah diseragamkan untuk seluruh sistem (Beranda, Monitoring, Riwayat, Jadwal, Admin, dll) untuk meningkatkan user experience.
+4. **Peningkatan Keamanan**: Data sensitif pada file konfigurasi lokal telah dihapus dari *tracking* Git untuk menjaga rahasia *credentials*.
+5. **Perbaikan Bug Jadwal**: Telah memperbaiki perhitungan *offset* sektor irigasi pada tampilan kalender/jadwal, serta merapikan sistem edit perangkat admin.
